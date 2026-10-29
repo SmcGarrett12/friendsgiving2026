@@ -17,7 +17,7 @@
     --rule: #4A5A4F;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; height: 100%; background: var(--ground); }
+  html, body { margin: 0; height: 100%; background: radial-gradient(ellipse at center, #243628 0%, #16221B 100%); }
   body { color: var(--text); font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif; overflow: hidden; }
 
   /* The menu is drawn as one portrait card at a fixed design size,
@@ -27,9 +27,11 @@
     position: absolute; left: 50%; top: 50%;
     transform-origin: center center;
     visibility: hidden;
-    width: 1080px;
-    padding: 64px 100px 56px;
-    display: flex; flex-direction: column; gap: 36px;
+    width: 1000px;
+    padding: 62px 90px 54px;
+    display: flex; flex-direction: column; gap: 30px;
+    background: #26382D; border: 1px solid var(--accent); border-radius: 26px;
+    box-shadow: 0 0 0 8px #26382D, 0 0 0 9px var(--rule), 0 30px 80px rgba(0,0,0,0.5);
   }
   .card.ready { visibility: visible; }
 
@@ -129,14 +131,14 @@
 <main class="card" id="card">
   <header>
     <h1>Friendsgiving 2026</h1>
-    <p class="details"><span class="date">Saturday 21 November</span> · Doors 6pm · Dinner 7pm<br>52 rue des Gravilliers, Paris 3e</p>
+    <p class="details"><span class="date">Saturday 21 November</span> · Doors 6pm · Dinner 7:30pm<br>52 rue des Gravilliers, Paris 3e</p>
     <button class="rsvp-open" type="button" id="rsvpOpen">RSVP</button>
   </header>
 
   <section>
     <h2>Mains</h2>
     <div class="dish"><h3>Dinde aux Herbes</h3><p>Herb-roasted turkey with lemon and a white wine–shallot jus</p></div>
-    <div class="dish"><h3>Rôti de porc au cidre et aux pommes</h3><p>Pork loin braised in cider with apples, Calvados–mustard sauce</p></div>
+    <div class="dish"><h3>Rôti de porc au cidre et aux pommes</h3><p>Normandy-style pork loin braised in apple cider with apples and onions, Calvados–mustard sauce and Aunt Poppy’s Homemade Apple Butter</p></div>
   </section>
 
   <section>
@@ -150,7 +152,7 @@
 
   <section>
     <h2>Dessert</h2>
-    <div class="dish"><h3>Port-poached pears<span class="v">V</span></h3><p>Pears poached slowly in ruby port</p></div>
+    <div class="dish"><h3>Port-poached pears<span class="v">V</span></h3><p>Pears poached slowly in Portuguese Tawny Port Wine</p></div>
   </section>
 
   <footer>
