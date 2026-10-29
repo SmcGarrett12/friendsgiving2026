@@ -175,6 +175,8 @@
   (function () {
     const card = document.getElementById('card');
     function fit() {
+      // While the user is pinch-zooming, leave the card alone so it doesn't fight the zoom.
+      if (window.visualViewport && window.visualViewport.scale > 1.01) return;
       const w = window.innerWidth, h = window.innerHeight;
       document.body.classList.toggle('phone', w / h < 0.62);
       card.style.transform = 'translate(-50%, -50%)';
@@ -184,7 +186,6 @@
     }
     fit();
     window.addEventListener('resize', fit);
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   })();
 </script>
