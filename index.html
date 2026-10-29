@@ -17,109 +17,52 @@
     --rule: #4A5A4F;
   }
   * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--ground); }
+  body { color: var(--text); font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif; overflow: hidden; }
 
-  /* Everything is sized from this one number, which scales with the screen
-     so the whole menu fits on one screen without scrolling. */
-  html {
-    background: var(--ground);
-    font-size: min(calc(100vh / 53), calc(100vw / 80));
-    font-size: min(calc(100dvh / 53), calc(100vw / 80));
+  /* The menu is drawn as one portrait card at a fixed design size,
+     then scaled down by the script so the whole card always fits the screen. */
+  .viewport { position: fixed; inset: 0; overflow: hidden; }
+  .card {
+    position: absolute; left: 50%; top: 50%;
+    transform-origin: center center;
+    visibility: hidden;
+    width: 1080px;
+    padding: 64px 100px 56px;
+    display: flex; flex-direction: column; gap: 36px;
   }
-  body {
-    margin: 0;
-    background: var(--ground);
-    color: var(--text);
-    font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif;
-  }
-  main {
-    min-height: 100vh;
-    min-height: 100dvh;
-    max-width: 90em;
-    margin: 0 auto;
-    padding: calc(2.6em + env(safe-area-inset-top, 0px)) 4em calc(2.6em + env(safe-area-inset-bottom, 0px));
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    gap: 2em;
-  }
+  .card.ready { visibility: visible; }
 
-  header { text-align: center; display: flex; flex-direction: column; gap: 0.5em; }
-  h1 {
-    margin: 0;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 600;
-    font-size: 3.3em;
-    line-height: 1.05;
-  }
-  .details { margin: 0; font-size: 1.15em; line-height: 1.5; color: var(--muted); }
+  header { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  h1 { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 68px; line-height: 1.05; }
+  .details { margin: 0; font-size: 24px; line-height: 1.5; color: var(--muted); }
   .date { color: var(--accent); }
 
-  .menu {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 4em;
-    align-content: center;
-  }
-  .col { display: flex; flex-direction: column; gap: 2em; }
-  section { display: flex; flex-direction: column; gap: 1.1em; }
+  section { display: flex; flex-direction: column; gap: 16px; }
   h2 {
-    margin: 0;
-    font-size: 0.85em;
-    font-weight: 500;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border-bottom: 1px solid var(--rule);
-    padding-bottom: 0.6em;
+    margin: 0; font-size: 18px; font-weight: 500; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--accent); border-bottom: 1px solid var(--rule); padding-bottom: 10px;
   }
-  .dish h3 {
-    margin: 0 0 0.15em;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 600;
-    font-size: 1.85em;
-    line-height: 1.15;
-  }
-  .dish p { margin: 0; font-size: 1em; line-height: 1.45; color: var(--muted); }
-  .v { font-family: 'Jost', Arial, sans-serif; font-size: 0.42em; font-weight: 500; color: var(--accent); vertical-align: 0.35em; }
+  .dish h3 { margin: 0 0 2px; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 40px; line-height: 1.15; }
+  .dish p { margin: 0; font-size: 23px; line-height: 1.4; color: var(--muted); }
+  .v { font-family: 'Jost', Arial, sans-serif; font-size: 17px; font-weight: 500; color: var(--accent); vertical-align: 12px; margin-left: 4px; }
 
-  footer { text-align: center; display: flex; flex-direction: column; gap: 0.4em; }
+  footer { text-align: center; display: flex; flex-direction: column; gap: 8px; }
   footer p { margin: 0; }
-  .invite { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 1.45em; line-height: 1.35; }
-  .key { font-size: 0.75em; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+  .invite { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 30px; line-height: 1.3; }
+  .key { font-size: 15px; letter-spacing: 3px; text-transform: uppercase; color: var(--faint); }
 
-  /* Phones and other tall, narrow screens: one column, dish names only,
-     so it still fits on one screen at a readable size. */
-  @media (orientation: portrait) {
-    html {
-      font-size: min(calc(100vh / 54), calc(100vw / 24));
-      font-size: min(calc(100dvh / 54), calc(100vw / 24));
-    }
-    main { padding-left: 1.6em; padding-right: 1.6em; gap: 1.6em; }
-    h1 { font-size: 2.6em; }
-    .details { font-size: 1em; }
-    .menu { display: flex; flex-direction: column; justify-content: center; gap: 1.6em; }
-    .col { display: contents; }
-    .mains { order: 1; }
-    .sides { order: 2; }
-    .dessert { order: 3; }
-    section { gap: 0.8em; }
-    .dish h3 { font-size: 1.5em; margin: 0; }
-    .dish p { display: none; }
-    .invite { font-size: 1.15em; }
-  }
+  /* Phones held upright: a narrower card with dish names only,
+     so the text stays big enough to read when the card is scaled to fit. */
+  .phone .card { width: 600px; padding: 56px 44px 48px; gap: 30px; }
+  .phone h1 { font-size: 60px; }
+  .phone .details { font-size: 23px; }
+  .phone section { gap: 12px; }
+  .phone .dish p { display: none; }
+  .phone .dish h3 { font-size: 38px; }
+  .phone .invite { font-size: 28px; }
 
-  /* Phones turned sideways: very little height, so names only. */
-  @media (orientation: landscape) and (max-height: 520px) {
-    html {
-      font-size: min(calc(100vh / 32), calc(100vw / 60));
-      font-size: min(calc(100dvh / 32), calc(100vw / 60));
-    }
-    main { gap: 1.2em; padding-top: calc(1.4em + env(safe-area-inset-top, 0px)); padding-bottom: calc(1.4em + env(safe-area-inset-bottom, 0px)); }
-    .col { gap: 1.2em; }
-    section { gap: 0.6em; }
-    .dish h3 { font-size: 1.5em; margin: 0; }
-    .dish p { display: none; }
-  }
-
+  .card .rsvp-open { font-size: 19px; margin-top: 8px; }
   /* RSVP */
   .rsvp-open {
     align-self: center;
@@ -182,67 +125,59 @@
 </style>
 </head>
 <body>
-<main>
+<div class="viewport">
+<main class="card" id="card">
   <header>
     <h1>Friendsgiving 2026</h1>
     <p class="details"><span class="date">Saturday 21 November</span> · Doors 6pm · Dinner 7pm<br>52 rue des Gravilliers, Paris 3e</p>
     <button class="rsvp-open" type="button" id="rsvpOpen">RSVP</button>
   </header>
 
-  <div class="menu">
-    <div class="col">
-      <section class="mains">
-        <h2>Mains</h2>
-        <div class="dish">
-          <h3>Dinde aux Herbes</h3>
-          <p>Herb-roasted turkey with thyme, sage, garlic and lemon, and a white wine–shallot jus</p>
-        </div>
-        <div class="dish">
-          <h3>Rôti de porc au cidre et aux pommes</h3>
-          <p>Pork loin pot-roasted in cider with onions and apples, finished with a Calvados–mustard sauce</p>
-        </div>
-      </section>
-      <section class="dessert">
-        <h2>Dessert</h2>
-        <div class="dish">
-          <h3>Port-poached pears <span class="v">V</span></h3>
-          <p>Pears poached slowly in ruby port</p>
-        </div>
-      </section>
-    </div>
+  <section>
+    <h2>Mains</h2>
+    <div class="dish"><h3>Dinde aux Herbes</h3><p>Herb-roasted turkey with lemon and a white wine–shallot jus</p></div>
+    <div class="dish"><h3>Rôti de porc au cidre et aux pommes</h3><p>Pork loin braised in cider with apples, Calvados–mustard sauce</p></div>
+  </section>
 
-    <div class="col">
-      <section class="sides">
-        <h2>Sides</h2>
-        <div class="dish">
-          <h3>Gigantes Plaki <span class="v">V</span></h3>
-          <p>Greek-style baked white beans in tomato, onion and olive oil, with herbs and lemon</p>
-        </div>
-        <div class="dish">
-          <h3>Carottes Glacées <span class="v">V</span></h3>
-          <p>Carrots glazed with honey, herbes de Provence and orange zest</p>
-        </div>
-        <div class="dish">
-          <h3>Choux de Bruxelles braisés au vin blanc <span class="v">V</span></h3>
-          <p>Brussels sprouts braised with shallots and white wine, with smoked lardons on the side</p>
-        </div>
-        <div class="dish">
-          <h3>Purée de pommes de terre</h3>
-          <p>Mashed potatoes, the style still to be revealed</p>
-        </div>
-        <div class="dish">
-          <h3>Patates douces rôties aux pommes <span class="v">V</span></h3>
-          <p>All of autumn on one sheet pan: sweet potato, red onion and apple, smoky paprika and a drizzle of honey</p>
-        </div>
-      </section>
-    </div>
-  </div>
+  <section>
+    <h2>Sides</h2>
+    <div class="dish"><h3>Gigantes Plaki<span class="v">V</span></h3><p>Greek baked white beans in tomato and olive oil, with lemon</p></div>
+    <div class="dish"><h3>Carottes Glacées<span class="v">V</span></h3><p>Honey-glazed carrots with herbes de Provence and orange zest</p></div>
+    <div class="dish"><h3>Choux de Bruxelles braisés au vin blanc<span class="v">V</span></h3><p>Braised in white wine with shallots, lardons on the side</p></div>
+    <div class="dish"><h3>Purée de pommes de terre</h3><p>Mashed potatoes, the style still to be revealed</p></div>
+    <div class="dish"><h3>Patates douces rôties aux pommes<span class="v">V</span></h3><p>All of autumn on one sheet pan: sweet potato, red onion, apple</p></div>
+  </section>
+
+  <section>
+    <h2>Dessert</h2>
+    <div class="dish"><h3>Port-poached pears<span class="v">V</span></h3><p>Pears poached slowly in ruby port</p></div>
+  </section>
 
   <footer>
     <p class="invite">A homemade dish or a bottle of wine is always welcome, but never expected</p>
     <p class="key">V = vegetarian</p>
   </footer>
 </main>
+</div>
+
+<script>
+  // Scale the card so all of it fits on screen, whatever the screen.
+  (function () {
+    const card = document.getElementById('card');
+    function fit() {
+      const w = window.innerWidth, h = window.innerHeight;
+      document.body.classList.toggle('phone', w / h < 0.62);
+      card.style.transform = 'translate(-50%, -50%)';
+      const s = Math.min(w / card.offsetWidth, h / card.offsetHeight) * 0.97;
+      card.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+      card.classList.add('ready');
+    }
+    fit();
+    window.addEventListener('resize', fit);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  })();
+</script>
 
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
   <div class="panel">
@@ -258,7 +193,7 @@
 
 <script>
   // Paste your Google Apps Script web app URL between the quotes:
-  const SCRIPT_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSbR9Kgp6u0CUNpgNOAXMl7vvdWoloom0Oq18G5UdFSj0awvpajRy2EzQ_gVoE_ZdfAHD8Lk-gbp2iPpFBzoWEPeofqTVGg4qrY4oj2LuS01Q_DjcQff5ENBHDKglw6cyJvX3RbLSz4LHuD0c02uyP9OvuifYkxcLYUgcL8TUKYDyMsFSfaNrY2Nhb8JD9IJJDoxWkqKeSJ2sLHCqQu9RX9tk_n7qVyHzv711OcDAScJEIRBwb1FGi9wD5lSmmDSkV3v9A-6aQyr5gQoU55AjP8TYl4LQ&lib=MtdJFq3QOSb8d3EmJZBNLBQcYEXgF-m4o';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzFNIZTn-fGf1y3xWupzDw0uQ7fpL303Ng-1eryyje6z4fsV4_GPGGMLQxyLEQb29IgGA/exec';
 
   const overlay = document.getElementById('overlay');
   const list = document.getElementById('guests');
@@ -319,6 +254,7 @@
       if (!guests.length) showMsg('The guest list is on its way.');
       else render();
     } catch (e) {
+      console.error('RSVP load failed:', e);
       showMsg('Couldn’t load the guest list. Please try again in a moment.');
     }
   }
