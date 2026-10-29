@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Friendsgiving 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,7 +17,14 @@
     --rule: #4A5A4F;
   }
   * { box-sizing: border-box; }
-  html { background: var(--ground); }
+
+  /* Everything is sized from this one number, which scales with the screen
+     so the whole menu fits on one screen without scrolling. */
+  html {
+    background: var(--ground);
+    font-size: min(calc(100vh / 53), calc(100vw / 80));
+    font-size: min(calc(100dvh / 53), calc(100vw / 80));
+  }
   body {
     margin: 0;
     background: var(--ground);
@@ -25,47 +32,153 @@
     font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif;
   }
   main {
-    max-width: 860px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    max-width: 90em;
     margin: 0 auto;
-    padding: clamp(40px, 8vw, 72px) clamp(22px, 7vw, 80px);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(32px, 5vw, 48px);
+    padding: calc(2.6em + env(safe-area-inset-top, 0px)) 4em calc(2.6em + env(safe-area-inset-bottom, 0px));
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 2em;
   }
-  header { text-align: center; display: flex; flex-direction: column; gap: 8px; }
+
+  header { text-align: center; display: flex; flex-direction: column; gap: 0.5em; }
   h1 {
     margin: 0;
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: clamp(38px, 7vw, 56px);
-    line-height: 1.1;
+    font-size: 3.3em;
+    line-height: 1.05;
   }
-  .details { margin: 0; font-size: clamp(16px, 2.4vw, 21px); line-height: 1.5; color: var(--muted); }
+  .details { margin: 0; font-size: 1.15em; line-height: 1.5; color: var(--muted); }
   .date { color: var(--accent); }
-  section { display: flex; flex-direction: column; gap: 22px; }
+
+  .menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 4em;
+    align-content: center;
+  }
+  .col { display: flex; flex-direction: column; gap: 2em; }
+  section { display: flex; flex-direction: column; gap: 1.1em; }
   h2 {
     margin: 0;
-    font-size: 15px;
+    font-size: 0.85em;
     font-weight: 500;
-    letter-spacing: 4px;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--accent);
     border-bottom: 1px solid var(--rule);
-    padding-bottom: 10px;
+    padding-bottom: 0.6em;
   }
   .dish h3 {
-    margin: 0 0 4px;
+    margin: 0 0 0.15em;
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 600;
-    font-size: clamp(26px, 4.4vw, 36px);
+    font-size: 1.85em;
     line-height: 1.15;
   }
-  .dish p { margin: 0; font-size: clamp(15px, 2.2vw, 19px); line-height: 1.5; color: var(--muted); }
-  .v { font-family: 'Jost', Arial, sans-serif; font-size: 14px; font-weight: 500; color: var(--accent); }
-  footer { text-align: center; display: flex; flex-direction: column; gap: 10px; padding-top: 8px; }
+  .dish p { margin: 0; font-size: 1em; line-height: 1.45; color: var(--muted); }
+  .v { font-family: 'Jost', Arial, sans-serif; font-size: 0.42em; font-weight: 500; color: var(--accent); vertical-align: 0.35em; }
+
+  footer { text-align: center; display: flex; flex-direction: column; gap: 0.4em; }
   footer p { margin: 0; }
-  .invite { font-size: clamp(16px, 2.4vw, 20px); line-height: 1.5; color: var(--muted); }
-  .key { font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--faint); }
+  .invite { font-family: 'Cormorant Garamond', Georgia, serif; font-style: italic; font-size: 1.45em; line-height: 1.35; }
+  .key { font-size: 0.75em; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); }
+
+  /* Phones and other tall, narrow screens: one column, dish names only,
+     so it still fits on one screen at a readable size. */
+  @media (orientation: portrait) {
+    html {
+      font-size: min(calc(100vh / 54), calc(100vw / 24));
+      font-size: min(calc(100dvh / 54), calc(100vw / 24));
+    }
+    main { padding-left: 1.6em; padding-right: 1.6em; gap: 1.6em; }
+    h1 { font-size: 2.6em; }
+    .details { font-size: 1em; }
+    .menu { display: flex; flex-direction: column; justify-content: center; gap: 1.6em; }
+    .col { display: contents; }
+    .mains { order: 1; }
+    .sides { order: 2; }
+    .dessert { order: 3; }
+    section { gap: 0.8em; }
+    .dish h3 { font-size: 1.5em; margin: 0; }
+    .dish p { display: none; }
+    .invite { font-size: 1.15em; }
+  }
+
+  /* Phones turned sideways: very little height, so names only. */
+  @media (orientation: landscape) and (max-height: 520px) {
+    html {
+      font-size: min(calc(100vh / 32), calc(100vw / 60));
+      font-size: min(calc(100dvh / 32), calc(100vw / 60));
+    }
+    main { gap: 1.2em; padding-top: calc(1.4em + env(safe-area-inset-top, 0px)); padding-bottom: calc(1.4em + env(safe-area-inset-bottom, 0px)); }
+    .col { gap: 1.2em; }
+    section { gap: 0.6em; }
+    .dish h3 { font-size: 1.5em; margin: 0; }
+    .dish p { display: none; }
+  }
+
+  /* RSVP */
+  .rsvp-open {
+    align-self: center;
+    margin-top: 0.4em;
+    font: 500 0.9em 'Jost', Arial, sans-serif;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ground);
+    background: var(--accent);
+    border: 0;
+    border-radius: 999px;
+    padding: 0.6em 1.6em;
+    cursor: pointer;
+  }
+  .rsvp-open:hover { background: var(--text); }
+  .overlay {
+    position: fixed; inset: 0; z-index: 10;
+    background: rgba(10, 18, 13, 0.72);
+    display: none; align-items: center; justify-content: center;
+    padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    font-size: 16px;
+  }
+  .overlay.open { display: flex; }
+  .panel {
+    width: 100%; max-width: 560px; max-height: 100%;
+    display: flex; flex-direction: column;
+    background: #26382D; border: 1px solid var(--rule); border-radius: 18px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  }
+  .panel-head { padding: 22px 24px 14px; border-bottom: 1px solid var(--rule); position: relative; }
+  .panel-head h2 { border: 0; padding: 0; font-size: 13px; }
+  .panel-head h3 { margin: 6px 0 4px; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.1; }
+  .tally { margin: 0; font-size: 14px; color: var(--muted); }
+  .close {
+    position: absolute; top: 14px; right: 14px;
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid var(--rule); background: transparent; color: var(--text);
+    font-size: 22px; line-height: 1; cursor: pointer;
+  }
+  .guests { list-style: none; margin: 0; padding: 8px 24px 20px; overflow-y: auto; }
+  .guest {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid rgba(74, 90, 79, 0.6);
+  }
+  .guest:last-child { border-bottom: 0; }
+  .gname { font-size: 17px; }
+  .gbtns { display: flex; gap: 8px; flex-shrink: 0; }
+  .gbtns button {
+    font: 500 13px 'Jost', Arial, sans-serif;
+    padding: 8px 12px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--rule); background: transparent; color: var(--muted);
+  }
+  .gbtns button:disabled { opacity: 0.5; cursor: default; }
+  .gbtns .yes.on { background: var(--accent); border-color: var(--accent); color: var(--ground); }
+  .gbtns .no.on { background: var(--muted); border-color: var(--muted); color: var(--ground); }
+  .msg { padding: 20px 24px; color: var(--muted); font-size: 15px; line-height: 1.5; }
+  @media (max-width: 420px) {
+    .guest { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
 </style>
 </head>
 <body>
@@ -73,56 +186,167 @@
   <header>
     <h1>Friendsgiving 2026</h1>
     <p class="details"><span class="date">Saturday 21 November</span> · Doors 6pm · Dinner 7pm<br>52 rue des Gravilliers, Paris 3e</p>
+    <button class="rsvp-open" type="button" id="rsvpOpen">RSVP</button>
   </header>
 
-  <section>
-    <h2>Mains</h2>
-    <div class="dish">
-      <h3>Dinde aux Herbes</h3>
-      <p>Herb-roasted turkey with thyme, sage, garlic and lemon, and a white wine–shallot jus</p>
+  <div class="menu">
+    <div class="col">
+      <section class="mains">
+        <h2>Mains</h2>
+        <div class="dish">
+          <h3>Dinde aux Herbes</h3>
+          <p>Herb-roasted turkey with thyme, sage, garlic and lemon, and a white wine–shallot jus</p>
+        </div>
+        <div class="dish">
+          <h3>Rôti de porc au cidre et aux pommes</h3>
+          <p>Pork loin pot-roasted in cider with onions and apples, finished with a Calvados–mustard sauce</p>
+        </div>
+      </section>
+      <section class="dessert">
+        <h2>Dessert</h2>
+        <div class="dish">
+          <h3>Port-poached pears <span class="v">V</span></h3>
+          <p>Pears poached slowly in ruby port</p>
+        </div>
+      </section>
     </div>
-    <div class="dish">
-      <h3>Rôti de porc au cidre et aux pommes</h3>
-      <p>Pork loin pot-roasted in cider with onions and apples, finished with a Calvados–mustard sauce and Poppy's Homemade Apple Butter</p>
-    </div>
-  </section>
 
-  <section>
-    <h2>Sides</h2>
-    <div class="dish">
-      <h3>Gigantes Plaki <span class="v">V</span></h3>
-      <p>Greek-style baked white beans in tomato, onion and olive oil, with herbs and lemon</p>
+    <div class="col">
+      <section class="sides">
+        <h2>Sides</h2>
+        <div class="dish">
+          <h3>Gigantes Plaki <span class="v">V</span></h3>
+          <p>Greek-style baked white beans in tomato, onion and olive oil, with herbs and lemon</p>
+        </div>
+        <div class="dish">
+          <h3>Carottes Glacées <span class="v">V</span></h3>
+          <p>Carrots glazed with honey, herbes de Provence and orange zest</p>
+        </div>
+        <div class="dish">
+          <h3>Choux de Bruxelles braisés au vin blanc <span class="v">V</span></h3>
+          <p>Brussels sprouts braised with shallots and white wine, with smoked lardons on the side</p>
+        </div>
+        <div class="dish">
+          <h3>Purée de pommes de terre</h3>
+          <p>Mashed potatoes, the style still to be revealed</p>
+        </div>
+        <div class="dish">
+          <h3>Patates douces rôties aux pommes <span class="v">V</span></h3>
+          <p>All of autumn on one sheet pan: sweet potato, red onion and apple, smoky paprika and a drizzle of honey</p>
+        </div>
+      </section>
     </div>
-    <div class="dish">
-      <h3>Carottes Glacées <span class="v">V</span></h3>
-      <p>Carrots glazed with honey, herbes de Provence and orange zest</p>
-    </div>
-    <div class="dish">
-      <h3>Choux de Bruxelles braisés au vin blanc <span class="v">V</span></h3>
-      <p>Brussels sprouts braised with shallots and white wine, with smoked lardons on the side</p>
-    </div>
-    <div class="dish">
-      <h3>Purée de pommes de terre</h3>
-      <p>Mashed potatoes, the style still to be revealed</p>
-    </div>
-    <div class="dish">
-      <h3>Patates douces rôties aux pommes <span class="v">V</span></h3>
-      <p>All of autumn on one sheet pan: sweet potato, red onion and apple, smoky paprika and a drizzle of honey</p>
-    </div>
-  </section>
-
-  <section>
-    <h2>Dessert</h2>
-    <div class="dish">
-      <h3>Port-poached pears <span class="v">V</span></h3>
-      <p>Pears poached slowly in Portuguese Tawny port</p>
-    </div>
-  </section>
+  </div>
 
   <footer>
     <p class="invite">A homemade dish or a bottle of wine is always welcome, but never expected</p>
     <p class="key">V = vegetarian</p>
   </footer>
 </main>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>RSVP</h2>
+      <h3 id="rsvpTitle">Will you be there?</h3>
+      <p class="tally" id="tally">Loading…</p>
+      <button class="close" type="button" id="rsvpClose" aria-label="Close">×</button>
+    </div>
+    <ul class="guests" id="guests"></ul>
+  </div>
+</div>
+
+<script>
+  // Paste your Google Apps Script web app URL between the quotes:
+  const SCRIPT_URL = 'https://script.googleusercontent.com/macros/echo?user_content_key=AUkAhnSbR9Kgp6u0CUNpgNOAXMl7vvdWoloom0Oq18G5UdFSj0awvpajRy2EzQ_gVoE_ZdfAHD8Lk-gbp2iPpFBzoWEPeofqTVGg4qrY4oj2LuS01Q_DjcQff5ENBHDKglw6cyJvX3RbLSz4LHuD0c02uyP9OvuifYkxcLYUgcL8TUKYDyMsFSfaNrY2Nhb8JD9IJJDoxWkqKeSJ2sLHCqQu9RX9tk_n7qVyHzv711OcDAScJEIRBwb1FGi9wD5lSmmDSkV3v9A-6aQyr5gQoU55AjP8TYl4LQ&lib=MtdJFq3QOSb8d3EmJZBNLBQcYEXgF-m4o';
+
+  const overlay = document.getElementById('overlay');
+  const list = document.getElementById('guests');
+  const tally = document.getElementById('tally');
+  let guests = [];
+  let busy = false;
+
+  function render() {
+    const yes = guests.filter(g => g.status === 'yes').length;
+    const no = guests.filter(g => g.status === 'no').length;
+    const waiting = guests.length - yes - no;
+    tally.textContent = `${yes} coming · ${no} can’t make it · ${waiting} not answered yet`;
+    list.innerHTML = '';
+    guests.forEach(g => {
+      const li = document.createElement('li');
+      li.className = 'guest';
+      const name = document.createElement('span');
+      name.className = 'gname';
+      name.textContent = g.name;
+      const btns = document.createElement('div');
+      btns.className = 'gbtns';
+      [['yes', 'Will attend'], ['no', 'Can’t make it']].forEach(([val, label]) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = val + (g.status === val ? ' on' : '');
+        b.textContent = label;
+        b.disabled = busy;
+        b.addEventListener('click', () => answer(g.name, val));
+        btns.appendChild(b);
+      });
+      li.append(name, btns);
+      list.appendChild(li);
+    });
+  }
+
+  function showMsg(text) {
+    tally.textContent = '';
+    list.innerHTML = '';
+    const p = document.createElement('li');
+    p.className = 'msg';
+    p.textContent = text;
+    list.appendChild(p);
+  }
+
+  async function call(params) {
+    const url = SCRIPT_URL + '?' + new URLSearchParams(params).toString();
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    return data.guests || [];
+  }
+
+  async function load() {
+    if (!SCRIPT_URL.startsWith('https://')) { showMsg('RSVPs aren’t connected yet. Check back soon!'); return; }
+    tally.textContent = 'Loading…';
+    try {
+      guests = await call({ action: 'list', t: Date.now() });
+      if (!guests.length) showMsg('The guest list is on its way.');
+      else render();
+    } catch (e) {
+      showMsg('Couldn’t load the guest list. Please try again in a moment.');
+    }
+  }
+
+  async function answer(name, status) {
+    if (busy) return;
+    busy = true;
+    const prev = guests.map(g => ({ ...g }));
+    guests = guests.map(g => g.name === name ? { ...g, status } : g);
+    render();
+    try {
+      guests = await call({ action: 'rsvp', name, status, t: Date.now() });
+    } catch (e) {
+      guests = prev;
+      alert('Sorry, that didn’t save. Please try again.');
+    }
+    busy = false;
+    render();
+  }
+
+  function open() { overlay.classList.add('open'); if (location.hash !== '#rsvp') history.replaceState(null, '', '#rsvp'); load(); }
+  function close() { overlay.classList.remove('open'); history.replaceState(null, '', location.pathname + location.search); }
+
+  document.getElementById('rsvpOpen').addEventListener('click', open);
+  document.getElementById('rsvpClose').addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(); });
+  if (location.hash === '#rsvp') open();
+</script>
 </body>
 </html>
